@@ -1,0 +1,18 @@
+v0.2
+-Unite text outlines
+-Improve setup layer removal
+
+v0.3
+-Moved to Illustrator v27.0
+-Fixed deselect() with redraw()
+-Fixed staging issues with object types
+
+v0.4
+-Improved setup layer removal
+
+errors
+-"compound path tools not available right now" random maybe redraw() or compound paths are not properly merged
+-black & gold SOMETIMES not minus front from text on SOME text
+
+v0.8
+- removed "minus" interactions in-favor of premade templates for faster processing time
