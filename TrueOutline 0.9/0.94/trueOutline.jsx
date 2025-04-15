@@ -241,7 +241,7 @@ var layerOptions = {
         "addOffsetTextInv": false, //Pathfinder Unite with offset textInv
         "minusText": true, //PathFinder MinusFront with standard text
         "add": [], //PathFinder Unite for art in WorkingDesign
-        "minus": [] //PathFinder MinusFront for art in WorkingDesign
+        "minus": ["Line"] //PathFinder MinusFront for art in WorkingDesign
     },
     "MetalBack": {
         "cookieCutter": false,
@@ -249,7 +249,7 @@ var layerOptions = {
         "addOffsetTextInv": false,
         "minusText": true,
         "add": [],
-        "minus": []
+        "minus": ["Line"]
     },
     "Bck": {
         "cookieCutter": false,
@@ -257,7 +257,7 @@ var layerOptions = {
         "addOffsetTextInv": true,
         "minusText": true,
         "add": [],
-        "minus": []
+        "minus": ["Line"]
     },
     "MetalFront": {
         "cookieCutter": false,
@@ -265,7 +265,7 @@ var layerOptions = {
         "addOffsetTextInv": false,
         "minusText": true,
         "add": [],
-        "minus": []
+        "minus": ["Line"]
     },
     "MetalBack2": {
         "cookieCutter": false,
@@ -273,7 +273,7 @@ var layerOptions = {
         "addOffsetTextInv": false,
         "minusText": true,
         "add": [],
-        "minus": []
+        "minus": ["Line"]
     },
     "MetalBack3": {
         "cookieCutter": false,
@@ -281,7 +281,7 @@ var layerOptions = {
         "addOffsetTextInv": false,
         "minusText": true,
         "add": [],
-        "minus": []
+        "minus": ["Line"]
     },
     "MetalBack4": {
         "cookieCutter": false,
@@ -289,14 +289,14 @@ var layerOptions = {
         "addOffsetTextInv": false,
         "minusText": true,
         "add": [],
-        "minus": []
+        "minus": ["Line"]
     },
     "MetalBack5": {
         "cookieCutter": false,
         "addOffsetText": false,
         "minusText": true,
         "add": [],
-        "minus": []
+        "minus": ["Line"]
     },
     "MetalBack6": {
         "cookieCutter": false,
@@ -304,7 +304,7 @@ var layerOptions = {
         "addOffsetTextInv": false,
         "minusText": true,
         "add": [],
-        "minus": []
+        "minus": ["Line"]
     },
     "Template": {
         "cookieCutter": true,
@@ -351,6 +351,11 @@ function workLayer(layer, options) {
     for (i=0; i<count; i++) {
         try {
             exportDoc.layers["WorkingDesign"].groupItems[options["minus"][i]].duplicate(exportDoc.layers["Working"]);
+            if (options["minus"][i] == "Line") {
+                deselect();
+                exportDoc.layers["Working"].groupItems["Line"].selected = true;
+                app.doScript("fixOffset", "trueOutline"); //fixes bad overlap from pathfinder
+            }
         } catch (e) {
             //item does not exist in current doc
         }
@@ -555,7 +560,7 @@ if (fontType == "FontLine") {
 
     exportDoc.layers["Working"].compoundPathItems[0].move(exportDoc.layers["FinishedFont"], ElementPlacement.PLACEATBEGINNING);
 }
-stop()
+
 //moving items
 exportDoc.layers["OffsetFont"].remove();
 exportDoc.layers["Working"].remove();
