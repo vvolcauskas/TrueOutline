@@ -11,5 +11,7 @@ Setup:
 FontInv will add offset text to metalBack instead of Inv
 
 "Font" layer will call "offset1" action
+
 "Font2" layer will call offset2" action
+
 "FontInv" layer will call "offsetInv" action
