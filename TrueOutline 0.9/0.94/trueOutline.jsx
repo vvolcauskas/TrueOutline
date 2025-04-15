@@ -678,3 +678,101 @@ for (i=exportDoc.layers.length - 1; i>0; i--) { //work backwards to avoid sequen
 }
 
 deselect();
+
+// accound for Line tag
+if (fontType == "FontLine") {
+    exportDoc.layers["MetalBack2"].groupItems[0].selected = true;
+    app.doScript("releaseCompoundPath", "trueOutline");
+
+    lowestAnchors = [];
+    var countPath = exportDoc.layers["MetalBack2"].groupItems[0].pageItems.length;
+    var paths = exportDoc.layers["MetalBack2"].groupItems[0].pageItems;
+    for (i = 0; i < countPath; i++) {
+        if (paths[i].typename == "CompoundPathItem") {
+            for (f=0; f<paths[i].pathItems.length; f++) {
+                var countPoints = paths[i].pathItems[f].pathPoints.length;
+                for (j = 0; j < countPoints; j++) {
+                    if (paths[i].pathItems[f].pathPoints[j].anchor[1] < lowestAnchors[i] || lowestAnchors[i] == undefined) { // higher y = lower on screen
+                        lowestAnchors[i] = paths[i].pathItems[f].pathPoints[j].anchor[1];
+                    }
+                }
+            }
+        } else {
+            var countPoints = paths[i].pathPoints.length;
+            for (j = 0; j < countPoints; j++) {
+                if (paths[i].pathPoints[j].anchor[1] < lowestAnchors[i] || lowestAnchors[i] == undefined) { // higher y = lower on screen
+                    lowestAnchors[i] = paths[i].pathPoints[j].anchor[1];
+                }
+            }
+        }
+        
+    }
+
+    // find highest vertex
+    var highestAnchor = 0;
+    for (i = 0; i < countPath; i++) {
+        if (lowestAnchors[i] < lowestAnchors[highestAnchor]) {
+            highestAnchor = i;
+        }
+    }
+
+    // remove all but highest vertex
+    for (i = countPath - 1; i >= 0; i--) { //work backwards to avoid sequencing errors
+        if (i != highestAnchor) {
+            exportDoc.layers["MetalBack2"].groupItems[0].pageItems[i].remove();
+        }
+    }
+
+    // make to compound path
+    exportDoc.layers["MetalBack2"].groupItems[0].selected = true;
+    app.doScript("makeCompoundPath", "trueOutline");
+}
+
+deselect();
+
+// accound for Line tag
+if (fontType == "FontLine") {
+    exportDoc.layers["MetalBack"].groupItems[0].selected = true;
+    app.doScript("releaseCompoundPath", "trueOutline");
+
+    lowestAnchors = [];
+    var countPath = exportDoc.layers["MetalBack"].groupItems[0].pageItems.length;
+    var paths = exportDoc.layers["MetalBack"].groupItems[0].pageItems;
+    for (i = 0; i < countPath; i++) {
+        if (paths[i].typename == "CompoundPathItem") {
+            for (f=0; f<paths[i].pathItems.length; f++) {
+                var countPoints = paths[i].pathItems[f].pathPoints.length;
+                for (j = 0; j < countPoints; j++) {
+                    if (paths[i].pathItems[f].pathPoints[j].anchor[1] < lowestAnchors[i] || lowestAnchors[i] == undefined) { // higher y = lower on screen
+                        lowestAnchors[i] = paths[i].pathItems[f].pathPoints[j].anchor[1];
+                    }
+                }
+            }
+        } else {
+            var countPoints = paths[i].pathPoints.length;
+            for (j = 0; j < countPoints; j++) {
+                if (paths[i].pathPoints[j].anchor[1] < lowestAnchors[i] || lowestAnchors[i] == undefined) { // higher y = lower on screen
+                    lowestAnchors[i] = paths[i].pathPoints[j].anchor[1];
+                }
+            }
+        }
+        
+    }
+
+    // find lowest vertex
+    var highestAnchor = 0;
+    for (i = 0; i < countPath; i++) {
+        if (lowestAnchors[i] < lowestAnchors[highestAnchor]) {
+            highestAnchor = i;
+        }
+    }
+
+    // remove lowest vertex
+    exportDoc.layers["MetalBack"].groupItems[0].pageItems[highestAnchor].remove();
+
+    // make to compound path
+    exportDoc.layers["MetalBack"].groupItems[0].selected = true;
+    app.doScript("makeCompoundPath", "trueOutline");
+}
+
+deselect();
