@@ -687,8 +687,17 @@ if (fontType == "FontLine") {
     app.doScript("releaseCompoundPath", "trueOutline");
 
     lowestAnchors = [];
-    var countPath = exportDoc.layers["MetalBack2"].groupItems[0].pageItems.length;
     var paths = exportDoc.layers["MetalBack2"].groupItems[0].pageItems;
+    var countPath = paths.length;
+
+    // check for groups and turn them into compound paths
+    var groupItemCount = exportDoc.layers["MetalBack2"].groupItems[0].groupItems.length;
+    for (i = 0; i < groupItemCount ; i++) {
+        deselect();
+        exportDoc.layers["MetalBack2"].groupItems[0].groupItems[i].selected = true;
+        app.doScript("makeCompoundPath", "trueOutline");
+    }
+
     for (i = 0; i < countPath; i++) {
         if (paths[i].typename == "CompoundPathItem") {
             for (f=0; f<paths[i].pathItems.length; f++) {
@@ -740,6 +749,15 @@ if (fontType == "FontLine") {
     lowestAnchors = [];
     var countPath = exportDoc.layers["MetalBack"].groupItems[0].pageItems.length;
     var paths = exportDoc.layers["MetalBack"].groupItems[0].pageItems;
+
+    // check for groups and turn them into compound paths
+    var groupItemCount = exportDoc.layers["MetalBack"].groupItems[0].groupItems.length;
+    for (i = 0; i < groupItemCount ; i++) {
+        deselect();
+        exportDoc.layers["MetalBack"].groupItems[0].groupItems[i].selected = true;
+        app.doScript("makeCompoundPath", "trueOutline");
+    }
+
     for (i = 0; i < countPath; i++) {
         if (paths[i].typename == "CompoundPathItem") {
             for (f=0; f<paths[i].pathItems.length; f++) {
@@ -776,5 +794,13 @@ if (fontType == "FontLine") {
     exportDoc.layers["MetalBack"].groupItems[0].selected = true;
     app.doScript("makeCompoundPath", "trueOutline");
 }
+
+deselect();
+
+// line font can sometimes be a compoundPath in a group
+if (exportDoc.layers["Line"].groupItems.length > 0) {
+    exportDoc.layers["Line"].groupItems[0].selected = true;
+    app.doScript("makeCompoundPath", "trueOutline");
+};
 
 deselect();
