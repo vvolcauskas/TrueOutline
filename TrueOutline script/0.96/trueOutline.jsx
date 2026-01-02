@@ -253,7 +253,7 @@ var layerOptions = {
         "addOffsetTextInv": false,
         "minusText": true,
         "add": [],
-        "minus": ["Line"]
+        "minus": ["Line", "Inv"]
     },
     "MetalBack": {
         "cookieCutter": false,
